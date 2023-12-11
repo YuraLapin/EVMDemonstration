@@ -220,11 +220,35 @@
             bool ov = false;
             bool z = res.IsZero();
 
-            if (dop1[0] == dop2[0] && (mem != 0 || dop1[0] != res[0]))
+            if (dop1[0] == 0 && dop1[0] == dop2[0] && (mem != 0 || dop1[0] != res[0]))
             {
                 ov = true;
                 z = false;
                 res.SetZero();
+            }
+
+            if (dop1[0] == 1 && dop1[0] == dop2[0] && (mem != 0 || dop1[0] != res[0]))
+            {
+                var tmp1 = new BinaryNumber();
+                var tmp2 = new BinaryNumber();
+                var tmp3 = new BinaryNumber();
+                tmp1[0] = 0;
+                tmp2[0] = 0;
+                mem = 0;
+
+                for (int i = SIZE - 1; i >= 0; --i)
+                {
+                    int tmp = tmp1[i] + tmp2[i] + mem;
+                    tmp3[i] = tmp % 2;
+                    mem = tmp / 2;
+                }
+
+                if (mem != 0)
+                {
+                    ov = true;
+                    z = false;
+                    res.SetZero();
+                }
             }
 
             res = res.ConvertToStraight();
